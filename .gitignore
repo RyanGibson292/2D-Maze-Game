@@ -34,3 +34,26 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+.prettierrc.toml
+omnisharp.json
+.vscode/settings.json
+.vscode/settings.json
+node_modules/.bin/prettier.cmd
+node_modules/.bin/prettier
+node_modules/.bin/prettier.ps1
+Assets/Scripts/EnemyScript.cs
+node_modules/prettier/bin-prettier.js
+node_modules/prettier/doc.js
+node_modules/prettier/index.js
+node_modules/prettier/LICENSE
+node_modules/prettier/package.json
+node_modules/prettier/parser-angular.js
+node_modules/prettier/parser-babel.js
+node_modules/prettier/parser-flow.js
+node_modules/prettier/parser-glimmer.js
+node_modules/prettier/parser-graphql.js
+node_modules/prettier/parser-html.js
+node_modules/prettier/parser-markdown.js
+node_modules/prettier/parser-postcss.js
+node_modules/prettier/parser-typescript.js
+node_modules/prettier/parser-yaml.js
