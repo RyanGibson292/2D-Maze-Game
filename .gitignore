@@ -41,7 +41,6 @@ omnisharp.json
 node_modules/.bin/prettier.cmd
 node_modules/.bin/prettier
 node_modules/.bin/prettier.ps1
-Assets/Scripts/EnemyScript.cs
 node_modules/prettier/bin-prettier.js
 node_modules/prettier/doc.js
 node_modules/prettier/index.js
