@@ -3,16 +3,13 @@
 public class SafePoint : MonoBehaviour {
     private GameObject capture;
 
-    void Update()
-    {
-        
-    }
-
-    private void OnCollisionEnter2D(Collision2D other) {
-        if(other.gameObject.CompareTag("Enemy") && capture == null) {
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.CompareTag("Hostage") && capture == null) {
             capture = other.gameObject;
-            EnemyTest enemy = capture.GetComponent<EnemyTest>();
-            enemy.SetTarget(this.gameObject);
+            Hostage hostage = other.gameObject.GetComponent<Hostage>();
+            hostage.SetTrapped(true);
+            hostage.transform.position = transform.position;
+            hostage.GetPlayer().GetComponent<Player>().SaveHostage();
         }
     }
 }

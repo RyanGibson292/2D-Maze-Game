@@ -4,11 +4,13 @@ using TMPro;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D body;
-    private int deathTimer;
+    private int deathTimer, hostagesSaved, lives = 1, hostageCount;
     public TextMeshPro deathText;
+    private Vector3 spawnPoint;
 
     void Start() {
         body = GetComponent<Rigidbody2D>();
+        spawnPoint = transform.position;
     }
 
     void Update() {
@@ -66,14 +68,43 @@ public class Player : MonoBehaviour {
 
         transform.position = position;
         body.velocity = velocity;
+
+        if(hostagesSaved >= hostageCount) {
+            deathText.text = "You Win!!!";
+            SceneManager.LoadScene("Winning Screen");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.CompareTag("Maze")) {
-            deathTimer++;
-            if (deathText != null) {
-                deathText.text = "You died!";
+            lives--;
+            transform.position = this.spawnPoint;
+            if(lives <= 0) {
+                deathTimer++;
+                if (deathText != null) {
+                    deathText.text = "You died!";
+                }
             }
         }
+    }
+
+    public void SaveHostage() {
+        this.hostagesSaved++;
+    }
+
+    public void SetLives(int livesIn) {
+        this.lives = livesIn;
+    }
+
+    public int GetLives() {
+        return this.lives;
+    }
+
+    public Vector3 GetSpawnPoint() {
+        return this.spawnPoint;
+    }
+
+    public void AddHostages(int amount) {
+        this.hostageCount += amount;
     }
 }
