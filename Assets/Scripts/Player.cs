@@ -4,8 +4,8 @@ using TMPro;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D body;
-    private int deathTimer, hostagesSaved, lives = 1, hostageCount;
-    public TextMeshPro deathText;
+    private int deathTimer, hostagesSaved, lives = 1, hostageCount, wallPhaseTimer, gameTimer;
+    public TextMeshPro uiText;
     private Vector3 spawnPoint;
 
     void Start() {
@@ -14,9 +14,14 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
+        Vector3 cameraPos = transform.GetChild(0).transform.position;
+        cameraPos.x += 3;
+        cameraPos.y += 6;
+        cameraPos.z = 0;
+        uiText.transform.position = cameraPos;
         Vector3 velocity = body.velocity;
 
-        if (deathTimer < 1) {
+        if (uiText.text == null || uiText.text == "") {
             if (Input.GetKey("left") || Input.GetKey("a")) {
                 body.AddForce(new Vector2(-0.5f, 0.0f));
             } else if (Input.GetKey("right") || Input.GetKey("d")) {
@@ -70,22 +75,40 @@ public class Player : MonoBehaviour {
         body.velocity = velocity;
 
         if(hostagesSaved >= hostageCount) {
-            deathText.text = "You Win!!!";
-            SceneManager.LoadScene("Winning Screen");
+            uiText.text = "You Win!!!\nYou completed it in: " + (gameTimer / 350) + " seconds\n\nPress 'e' to restart.";
+            if(Input.GetKey("e")) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
+
+        if(wallPhaseTimer > 0) {
+            wallPhaseTimer--;
+        }
+
+        if(uiText.text == null || uiText.text == "") {
+            gameTimer++;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.CompareTag("Maze")) {
-            lives--;
-            transform.position = this.spawnPoint;
-            if(lives <= 0) {
-                deathTimer++;
-                if (deathText != null) {
-                    deathText.text = "You died!";
+            if(wallPhaseTimer <= 0) {
+                lives--;
+                transform.position = this.spawnPoint;
+                if(lives <= 0) {
+                    deathTimer++;
+                    if (uiText != null) {
+                        uiText.text = "You died!";
+                    }
                 }
+            } else {
+                Physics2D.IgnoreCollision(other.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
             }
         }
+    }
+
+    public void DoWallPhaseEffect() {
+        this.wallPhaseTimer += 1000;
     }
 
     public void SaveHostage() {

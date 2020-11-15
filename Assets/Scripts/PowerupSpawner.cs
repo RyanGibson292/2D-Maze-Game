@@ -9,6 +9,9 @@ public class PowerupSpawner : MonoBehaviour {
     void Update() {
         if(rand.Next(5000, 15000) == 5000 && spawnedObject == null) {
             spawnedObject = Instantiate(powerUps[rand.Next(powerUps.Count)]);
+            Vector3 position = transform.position;
+            position.z = 0;
+            spawnedObject.transform.position = position;
         }
     }
 }
