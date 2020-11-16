@@ -5,7 +5,7 @@ using System;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D body;
-    private int deathTimer, hostagesSaved, lives = 1, hostageCount, wallPhaseTimer = 10000;
+    private int deathTimer, hostagesSaved, lives = 1, hostageCount, wallPhaseTimer = 5000;
     public TextMeshPro uiText, livesText, wallPhaserEffectTimer, hostagesSavedText;
     private Vector3 spawnPoint;
     private long startTime;
@@ -26,7 +26,6 @@ public class Player : MonoBehaviour {
             velocity = ApplyMovement(velocity);
         } else {
             if(dead) {
-                Debug.Log(dead);
                 deathTimer++;
                 if (deathTimer >= 400) {
                     deathTimer = 0;
@@ -87,8 +86,10 @@ public class Player : MonoBehaviour {
 
     private Vector3 ApplyMovement(Vector3 velocity) {
         if (Input.GetKey("left") || Input.GetKey("a")) {
+            if(velocity.x > 0) velocity.x = -0.5f; 
             body.AddForce(new Vector2(-0.5f, 0.0f));
         } else if (Input.GetKey("right") || Input.GetKey("d")) {
+            if(velocity.x < 0) velocity.x = 0.5f; 
             body.AddForce(new Vector2(0.5f, 0.0f));
         } else {
             if (velocity.x > 0.5f) {
@@ -99,8 +100,10 @@ public class Player : MonoBehaviour {
         }
 
         if (Input.GetKey("up") || Input.GetKey("w")) {
+            if(velocity.y < 0) velocity.y = 0.5f; 
             body.AddForce(new Vector2(0.0f, 0.5f));
         } else if (Input.GetKey("down") || Input.GetKey("s")) {
+            if(velocity.y > 0) velocity.y = -0.5f; 
             body.AddForce(new Vector2(0.0f, -0.5f));
         } else {
             if (velocity.y > 0.5f) {
@@ -178,7 +181,6 @@ public class Player : MonoBehaviour {
                     Physics2D.IgnoreCollision(other.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
                 }
             } else if(other.gameObject.CompareTag("Enemy")) {
-                Debug.Log(this.lives);
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 enemy.SetTarget(this.gameObject);
                 this.SetLives(this.GetLives() - 1);

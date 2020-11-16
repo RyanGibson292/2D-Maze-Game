@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     }
 
     private void ApplyNormalMovement() {
-        newRigidbody.AddForce(new Vector2(Random.Range(-50f, 50f), Random.Range(-50f, 50f)));
+        newRigidbody.AddForce(new Vector2(Random.Range(-25f, 25f), Random.Range(-25f, 25f)));
     }
 
     public void SetTarget(GameObject targetIn) {
