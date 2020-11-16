@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
             velocity = ApplyMovement(velocity);
         } else {
             if(dead) {
+                Debug.Log(dead);
                 deathTimer++;
                 if (deathTimer >= 400) {
                     deathTimer = 0;
@@ -45,6 +46,10 @@ public class Player : MonoBehaviour {
 
         if(wallPhaseTimer > 0) {
             wallPhaseTimer--;
+        }
+
+        if(lives <= 0) {
+            OnDeath();
         }
     }
 
@@ -67,7 +72,6 @@ public class Player : MonoBehaviour {
             } else if (velocity.x < -0.5f) {
                 velocity.x = -0.5f;
             }
-            Debug.Log(velocity);
         }
 
         if (Input.GetKey("up") || Input.GetKey("w")) {
@@ -141,24 +145,35 @@ public class Player : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
-        if(uiText != null || uiText.text == "") {
+        if(uiText.text != null || uiText.text == "") {
             if (other.gameObject.CompareTag("Maze")) {
                 if(wallPhaseTimer <= 0) {
                     lives--;
                     transform.position = this.spawnPoint;
-                    if(lives <= 0) {
-                        dead = true;
-                        deathTimer++;
-                        if (uiText != null) {
-                            uiText.text = "You died!";
-                        }
-                    }
                 } else {
                     Physics2D.IgnoreCollision(other.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
                 }
+            } else if(other.gameObject.CompareTag("Enemy")) {
+                Debug.Log(this.lives);
+                Enemy enemy = other.gameObject.GetComponent<Enemy>();
+                enemy.SetTarget(this.gameObject);
+                this.SetLives(this.GetLives() - 1);
+                Vector3 displacement = other.gameObject.transform.position - transform.position;
+                displacement = displacement.normalized;
+                displacement *= -1;
+                enemy.gameObject.GetComponent<Rigidbody2D>().AddRelativeForce(displacement, ForceMode2D.Force);
+                enemy.SetTarget(null);
             }
         } else {
             Physics2D.IgnoreCollision(other.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+        }
+    }
+
+    private void OnDeath() {
+        dead = true;
+        deathTimer++;
+        if (uiText.text != null || uiText.text == "") {
+            uiText.text = "You died!";
         }
     }
 

@@ -5,7 +5,6 @@ public class Enemy : MonoBehaviour
     private int ticksExisted;
     private GameObject target;
     private Rigidbody2D newRigidbody;
-    public GameObject player;
 
     void Start() {
         newRigidbody = GetComponent<Rigidbody2D>();
@@ -32,17 +31,7 @@ public class Enemy : MonoBehaviour
         newRigidbody.AddForce(new Vector2(Random.Range(-50f, 50f), Random.Range(-50f, 50f)));
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        if(other.gameObject.CompareTag("Player")) {
-            SetTarget(other.gameObject);
-        }
-    }
-
     public void SetTarget(GameObject targetIn) {
         this.target = targetIn;
-    }
-
-    public GameObject GetPlayer() {
-        return this.player;
     }
 }
