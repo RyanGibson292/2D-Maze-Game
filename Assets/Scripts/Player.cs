@@ -5,11 +5,12 @@ using System;
 
 public class Player : MonoBehaviour {
     private Rigidbody2D body;
-    private int deathTimer, hostagesSaved, lives = 1, hostageCount, wallPhaseTimer;
-    public TextMeshPro uiText;
+    private int deathTimer, hostagesSaved, lives = 1, hostageCount, wallPhaseTimer = 10000;
+    public TextMeshPro uiText, livesText, wallPhaserEffectTimer, hostagesSavedText;
     private Vector3 spawnPoint;
     private long startTime;
     private bool dead, won;
+    public GameObject wallPhaserEffect;
 
     void Start() {
         body = GetComponent<Rigidbody2D>();
@@ -18,7 +19,7 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
-        TransformText();
+        TransformUI();
         Vector3 velocity = body.velocity;
 
         if (uiText.text == null || uiText.text == "") {
@@ -53,12 +54,35 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void TransformText() {
+    private void TransformUI() {
         Vector3 cameraPos = transform.GetChild(0).transform.position;
         cameraPos.x += 3;
         cameraPos.y += 6;
         cameraPos.z = 0;
         uiText.transform.position = cameraPos;
+        cameraPos.x -= 12;
+        cameraPos.y += 0.5f;
+        livesText.transform.position = cameraPos;
+        livesText.text = "Lives: " + this.lives;
+        cameraPos.x -= 9;
+        cameraPos.x += 30;
+        cameraPos.y -= 16.5f;
+        cameraPos.z = 0;
+        hostagesSavedText.transform.position = cameraPos;
+        hostagesSavedText.text = "Hostages saved: " + hostagesSaved.ToString() + "/" + hostageCount.ToString();
+        if(wallPhaseTimer > 0) {
+            cameraPos.x -= 30;
+            cameraPos.y += 16.5f;
+            wallPhaserEffect.transform.position = cameraPos;
+            cameraPos.x += 11;
+            cameraPos.y -= 1.75f;
+            wallPhaserEffectTimer.transform.position = cameraPos;
+            wallPhaserEffectTimer.text = ":" + wallPhaseTimer.ToString();
+        } else {
+            cameraPos.z = -1;
+            wallPhaserEffect.transform.position = cameraPos;
+            wallPhaserEffectTimer.transform.position = cameraPos;
+        }
     }
 
     private Vector3 ApplyMovement(Vector3 velocity) {

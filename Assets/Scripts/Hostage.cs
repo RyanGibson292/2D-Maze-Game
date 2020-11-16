@@ -7,11 +7,14 @@ public class Hostage : MonoBehaviour
     private Rigidbody2D newRigidbody;
     public bool isTrapped;
     public GameObject player;
+    private SpriteRenderer spriteRenderer;
+    public Sprite normalSprite, targetSprite;
 
     void Start()
     {
         newRigidbody = GetComponent<Rigidbody2D>();
         player.GetComponent<Player>().AddHostages(1);
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void OnDestroy() {
@@ -34,6 +37,12 @@ public class Hostage : MonoBehaviour
             } else {
                 ApplyNormalMovement();
             }
+        }
+
+        if(target != null) {
+            spriteRenderer.sprite = targetSprite;
+        } else {
+            spriteRenderer.sprite = normalSprite;
         }
     }
 
