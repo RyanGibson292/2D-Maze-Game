@@ -19,7 +19,7 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
-        TransformUI();
+        //TransformUI();
         Vector3 velocity = body.velocity;
 
         if (uiText.text == null || uiText.text == "") {
